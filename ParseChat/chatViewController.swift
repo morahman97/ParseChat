@@ -41,8 +41,13 @@ class chatViewController: UIViewController, UITableViewDelegate, UITableViewData
         query.addDescendingOrder("createdAt")
         query.findObjectsInBackground(block: {(messages:[PFObject]?,error:Error?) in
             if error == nil {
+                var i=0
                 for mess in messages!{
-                    self.message.append(mess)
+                    if self.message.count<=i{
+                        self.message.append(mess)
+                    }
+                    self.message.insert(mess,at:i)
+                    i=i+1
                 }
             }
             else{
@@ -73,6 +78,7 @@ class chatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title="Chat"
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.onTimer), userInfo: nil, repeats: true)
         chatTableView.rowHeight = UITableViewAutomaticDimension
         chatTableView.estimatedRowHeight = 50
